@@ -1,10 +1,17 @@
-from fastapi import FastAPI, APIRouter
-from .helper import chat, example
+from fastapi import FastAPI
 
-router = APIRouter()
+from app.conversation.main import router as conversation_router
 
-@router.get("/")
-async def root():
-    await example()
+app = FastAPI()
 
+app.include_router(conversation_router)
 
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "app.main:app",
+        host="0.0.0.0",
+        port=3000,
+        reload=True,
+    )
