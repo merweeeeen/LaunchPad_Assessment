@@ -9,7 +9,7 @@ from .schema import ConversationFull, Description, Prompt, QueryRoleType
 load_dotenv()
 
 
-async def start_chat(payload, initiate_beanie):
+async def start_chat(payload, initiate_db):
     openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     completion = openai_client.chat.completions.create(
@@ -26,7 +26,7 @@ async def start_chat(payload, initiate_beanie):
 
     # tentatively 'name' of conversation would be the initial prompt
     name = message.content
-    await initiate_beanie()
+    await initiate_db()
     full_conversation = ConversationFull(
         id=uuid4(),
         name=name,
@@ -40,3 +40,19 @@ async def start_chat(payload, initiate_beanie):
     await full_conversation.insert()
 
     return full_conversation
+
+
+async def get_all_conversations(initiate_db):
+    await initiate_db()
+    retrieved_conversations = []
+
+    for conversation in await ConversationFull.find().to_list():
+        conversation = conversation.model_dump()
+        del conversation["messages"]
+        retrieved_conversations.append(conversation)
+    return retrieved_conversations
+
+
+async def get_a_conversation(id, initiate_db):
+    await initiate_db()
+    return await ConversationFull.find(ConversationFull.id == id).to_list()

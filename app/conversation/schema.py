@@ -1,19 +1,23 @@
-from typing import Any
+from typing import Any, Union
 from uuid import UUID
 
 from beanie import Document
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Description(BaseModel):
     description: dict[str, Any]
 
 
-class APIError(Document):
-    code: int
-    message: str
-    request: Description
-    details: Description
+class APIError(BaseModel):
+    code: int = Field(description="API Error code associated with the error")
+    message: str = Field(description="Error message associated with the error")
+    request: Description | None = Field(
+        None, description="Request details associated with the error"
+    )
+    details: Description | None = Field(
+        None, description="Other details associated with the error"
+    )
 
 
 class QueryRoleType(BaseModel):
