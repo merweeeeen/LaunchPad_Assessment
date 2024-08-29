@@ -2,7 +2,7 @@
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from .conversation.schema import ConversationFull
+from .queries.schema import ConversationFull
 
 client = AsyncIOMotorClient("mongodb://localhost:27017")
 
