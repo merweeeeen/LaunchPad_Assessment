@@ -11,15 +11,15 @@ router = APIRouter()
 
 
 @router.post("/conversations")
-async def create_conversation(payload: ConversationPayload, db=initiate_db):
-    return await start_conversation(payload, db)
+async def create_conversation(payload: ConversationPayload):
+    return await start_conversation(payload)
 
 
 @router.get("/conversations")
-async def get_conversations(db=initiate_db) -> list[Conversation] | APIError:
+async def get_conversations() -> list[Conversation] | APIError:
     try:
         print("Conversation: Here")
-        return await get_all_conversations(db)
+        return await get_all_conversations()
     except Exception as error:
         print("Conversastion: Not here")
         print("an error occured: ", error)
@@ -27,9 +27,9 @@ async def get_conversations(db=initiate_db) -> list[Conversation] | APIError:
 
 
 @router.get("/conversations/{id:uuid}")
-async def get_conversation_by_id(id: UUID, db: initiate_db):
+async def get_conversation_by_id(id: UUID):
     try:
-        if len(conversation := await get_a_conversation(id, db)) == 0:
+        if len(conversation := await get_a_conversation(id)) == 0:
             return APIError(code=404, message="Specified resource(s) was not found")
         else:
             return conversation

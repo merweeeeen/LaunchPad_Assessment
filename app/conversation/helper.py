@@ -10,7 +10,7 @@ from .schema import ConversationFull, Description, Prompt
 load_dotenv()
 
 
-async def start_conversation(payload, initiate_db):
+async def start_conversation(payload):
     openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     completion = openai_client.chat.completions.create(
@@ -42,7 +42,7 @@ async def start_conversation(payload, initiate_db):
     return full_conversation
 
 
-async def get_all_conversations(initiate_db):
+async def get_all_conversations():
     retrieved_conversations = []
     for conversation in await ConversationFull.find().to_list():
         conversation = conversation.model_dump()
@@ -51,5 +51,5 @@ async def get_all_conversations(initiate_db):
     return retrieved_conversations
 
 
-async def get_a_conversation(id, initiate_db):
+async def get_a_conversation(id):
     return await ConversationFull.find(ConversationFull.id == id).to_list()
