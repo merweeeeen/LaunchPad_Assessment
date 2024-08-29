@@ -42,7 +42,6 @@ async def new_query(id, body):
     # tentatively 'name' of conversation would be the initial prompt
     query_id = uuid4()
     conversation = await ConversationFull.find_one(ConversationFull.id == id)
-    print(conversation.messages)
     tokens = llm_response.usage
     await conversation.set(
         {
@@ -68,7 +67,6 @@ async def new_query(id, body):
             ],
         }
     )
-    print(await ConversationFull.find_one(ConversationFull.id == id))
 
     return query_id
 
@@ -83,7 +81,6 @@ async def existing_query(id, body):
 
     # tentatively 'name' of conversation would be the initial prompt
     query_id = uuid4()
-    print(conversation.messages)
     params = conversation.params.description
     tokens = llm_response.usage
     desc_params = DescriptionParams(
@@ -109,6 +106,5 @@ async def existing_query(id, body):
             "messages": messages,
         }
     )
-    print(await ConversationFull.find_one(ConversationFull.id == id))
 
     return query_id

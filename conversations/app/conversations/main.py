@@ -33,11 +33,8 @@ async def create_conversation(payload: ConversationPayload):
 @router.get("/conversations")
 async def get_conversations() -> list[Conversation] | APIError:
     try:
-        print("Conversation: Here")
         return await get_all_conversations()
     except Exception as error:
-        print("Conversastion: Not here")
-        print("an error occured: ", error)
         return APIError(code=500, message="Internal Server Error")
 
 
