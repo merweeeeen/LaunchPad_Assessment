@@ -1,4 +1,4 @@
-from typing import Any, Union
+from typing import Any, Literal
 from uuid import UUID
 
 from beanie import Document
@@ -20,12 +20,10 @@ class APIError(BaseModel):
     )
 
 
-class QueryRoleType(BaseModel):
-    role_type: str
-
-
 class Prompt(BaseModel):
-    role: QueryRoleType
+    role: Literal["assistant", "user", "system", "function"] = Field(
+        description="Query Role Type"
+    )
     content: str
 
 
