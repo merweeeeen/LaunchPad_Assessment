@@ -1,9 +1,8 @@
 # Not done due to errors with the DB connection after every test case
 import pytest
+from app.conversations.schema import ConversationFull, ConversationPayload
 from fastapi import status
 from httpx import AsyncClient
-
-from app.conversation.schema import ConversationFull, ConversationPayload
 
 
 @pytest.mark.asyncio

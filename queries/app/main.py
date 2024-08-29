@@ -1,8 +1,7 @@
 from contextlib import asynccontextmanager
 
+from app.queries.main import router as queries_router
 from fastapi import FastAPI
-
-from app.conversation.main import router as conversation_router
 
 from .db import initiate_db
 
@@ -15,7 +14,7 @@ async def init_db(app: FastAPI):
 
 app = FastAPI(lifespan=init_db)
 
-app.include_router(conversation_router)
+app.include_router(queries_router)
 
 if __name__ == "__main__":
     import uvicorn
@@ -23,6 +22,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
-        port=3000,
+        port=3001,
         reload=True,
     )
