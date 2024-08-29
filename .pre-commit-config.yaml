@@ -16,8 +16,6 @@ repos:
     -   id: debug-statements
     -   id: check-docstring-first
     -   id: check-executables-have-shebangs
-    -   id: name-tests-test
-        args: ["--pytest-test-first"]
     -   id: check-added-large-files
 
 
