@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Response
 
 from .helper import (
     existing_conversation,
@@ -21,42 +21,63 @@ router = APIRouter()
 
 
 @router.post("/conversations")
-async def create_conversation(payload: ConversationPayload):
+async def create_conversation(
+    payload: ConversationPayload, response: Response
+) -> ConversationFull | APIError:
     try:
         if payload.id:
             if await ConversationFull.find_one(ConversationFull.id == payload.id):
-                return await existing_conversation(payload)
+                result = await existing_conversation(payload)
+                response.status_code = 201
+                return result
+
+            response.status_code = 500
             return APIError(code=404, message="Conversation not found")
-        return await start_conversation(payload)
+
+        result = await start_conversation(payload)
+        response.status_code = 201
+        return result
     except:
+        response.status_code = 500
         return APIError(code=500, message="Internal Server Error")
 
 
 @router.get("/conversations")
-async def get_conversations() -> list[Conversation] | APIError:
+async def get_conversations(response: Response) -> list[Conversation] | APIError:
     try:
-        return await get_all_conversations()
-    except Exception as error:
+        result = await get_all_conversations()
+        response.status_code = 200
+        return result
+    except Exception:
+        response.status_code = 500
         return APIError(code=500, message="Internal Server Error")
 
 
 @router.get("/conversations/{id:uuid}")
-async def get_conversation_by_id(id: UUID):
+async def get_conversation_by_id(
+    id: UUID, response: Response
+) -> ConversationFull | APIError:
     try:
         if len(conversation := await get_a_conversation(id)) == 0:
+            response.status_code = 404
             return APIError(code=404, message="Specified resource(s) was not found")
         else:
+            response.status_code = 200
             return conversation
     except:
+        response.status_code = 500
         return APIError(code=500, message="Internal Server Error")
 
 
 @router.put("/conversations/{id:uuid}")
-async def update_conversations(id: UUID, payload: ConversationPut):
+async def update_conversations(id: UUID, payload: ConversationPut, response: Response):
     try:
         # Invalid parameters would be handled by FastAPi and pydantic
         if not await get_a_conversation(id):
+            response.status_code = 404
             return APIError(code=404, message="Specified resource(s) was not found")
-        return await update_a_conversation(id, payload)
+        await update_a_conversation(id, payload)
+        response.status_code = 204
     except:
+        response.status_code = 500
         return APIError(code=500, message="Internal Server Error")
