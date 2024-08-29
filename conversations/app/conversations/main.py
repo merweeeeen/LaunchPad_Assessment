@@ -22,11 +22,14 @@ router = APIRouter()
 
 @router.post("/conversations")
 async def create_conversation(payload: ConversationPayload):
-    if payload.id:
-        if await ConversationFull.find_one(ConversationFull.id == payload.id):
-            return await existing_conversation(payload)
-        return APIError(code=404, message="Conversation not found")
-    return await start_conversation(payload)
+    try:
+        if payload.id:
+            if await ConversationFull.find_one(ConversationFull.id == payload.id):
+                return await existing_conversation(payload)
+            return APIError(code=404, message="Conversation not found")
+        return await start_conversation(payload)
+    except:
+        return APIError(code=500, message="Internal Server Error")
 
 
 @router.get("/conversations")
@@ -50,7 +53,10 @@ async def get_conversation_by_id(id: UUID):
 
 @router.put("/conversations/{id:uuid}")
 async def update_conversations(id: UUID, payload: ConversationPut):
-    if not await get_a_conversation(id):
-        return APIError(code=404, message="Specified resource(s) was not found")
-    print("Payload: ", payload)
-    return await update_a_conversation(id, payload)
+    try:
+        # Invalid parameters would be handled by FastAPi and pydantic
+        if not await get_a_conversation(id):
+            return APIError(code=404, message="Specified resource(s) was not found")
+        return await update_a_conversation(id, payload)
+    except:
+        return APIError(code=500, message="Internal Server Error")
