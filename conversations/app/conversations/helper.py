@@ -61,3 +61,8 @@ async def update_a_conversation(id, payload):
     if params := payload.params:
         await conversation.set({ConversationFull.params: params})
     return status.HTTP_204_NO_CONTENT
+
+
+async def delete_a_conversation(id):
+    conversation = await ConversationFull.find_one(ConversationFull.id == id)
+    await conversation.delete()

@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Response
 
 from .helper import (
+    delete_a_conversation,
     existing_conversation,
     get_a_conversation,
     get_all_conversations,
@@ -80,4 +81,16 @@ async def update_conversations(id: UUID, payload: ConversationPut, response: Res
         response.status_code = 204
     except:
         response.status_code = 500
+        return APIError(code=500, message="Internal Server Error")
+
+
+@router.delete("/conversations/{id:uuid}")
+async def delete_conversation(id: UUID, response: Response):
+    try:
+        if not await get_a_conversation(id):
+            response.status_code = 404
+            return APIError(code=404, message="Specified resource(s) was not found")
+        await delete_a_conversation(id)
+        response.status_code = 204
+    except:
         return APIError(code=500, message="Internal Server Error")
