@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import requests
 from dotenv import load_dotenv
+from fastapi import status
 from openai import OpenAI
 
 from .schema import ConversationFull, Description, PromptPayload
@@ -29,7 +30,7 @@ async def start_conversation(payload):
     final_output = await ConversationFull.find_one(
         ConversationFull.id == conversation_id
     )
-
+    print(final_output)
     return final_output
 
 
@@ -51,3 +52,12 @@ async def get_all_conversations():
 
 async def get_a_conversation(id):
     return await ConversationFull.find(ConversationFull.id == id).to_list()
+
+
+async def update_a_conversation(id, payload):
+    conversation = await ConversationFull.find_one(ConversationFull.id == id)
+    if name := payload.name:
+        await conversation.set({ConversationFull.name: name})
+    if params := payload.params:
+        await conversation.set({ConversationFull.params: params})
+    return status.HTTP_204_NO_CONTENT

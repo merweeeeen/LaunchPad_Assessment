@@ -2,13 +2,12 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from app.db import initiate_db
-
 from .helper import (
     existing_conversation,
     get_a_conversation,
     get_all_conversations,
     start_conversation,
+    update_a_conversation,
 )
 from .schema import (
     APIError,
@@ -51,4 +50,7 @@ async def get_conversation_by_id(id: UUID):
 
 @router.put("/conversations/{id:uuid}")
 async def update_conversations(id: UUID, payload: ConversationPut):
-    return
+    if not await get_a_conversation(id):
+        return APIError(code=404, message="Specified resource(s) was not found")
+    print("Payload: ", payload)
+    return await update_a_conversation(id, payload)
