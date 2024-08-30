@@ -32,7 +32,6 @@ async def start_conversation(payload):
     final_output = await ConversationFull.find_one(
         ConversationFull.id == conversation_id
     )
-    print(final_output)
     return final_output
 
 
