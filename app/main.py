@@ -13,7 +13,7 @@ async def init_db(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Conversations", lifespan=init_db)
+app = FastAPI(title="LLM Interaction API", lifespan=init_db)
 
 app.include_router(conversation_router)
 app.include_router(queries_router)
