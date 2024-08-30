@@ -1,0 +1,27 @@
+version: "3.1"
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    ports:
+      - 27017:27017
+
+  conversations:
+    build:
+      context: .
+      dockerfile: conversations/Dockerfile
+    image: convo
+    env_file: .env
+    ports:
+      - 3000:3000
+
+  queries:
+    build:
+      context: .
+      dockerfile: queries/Dockerfile
+    image: queries
+    env_file: .env
+    ports:
+      - 3001:3001
