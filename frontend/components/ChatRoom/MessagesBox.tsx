@@ -46,35 +46,46 @@ const MessageBox = ({ id, setSubmitted, submitted }: any) => {
   }, [submitted]);
 
   return (
-    <ScrollArea h={700}>
-      <Stack bg="var(--mantine-color-body)" align="stretch" justify="center" gap="md" mt={'lg'}>
-        {conversation?.map((message) => {
-          return (
-            <>
-              <Stack
-                bg="var(--mantine-color-body)"
-                align="flex-end"
-                justify="flex-start"
-                gap="md"
-              >
-                <Card bg="var(--mantine-color-blue-light)" style={{ width: '70%' }}>
-                  <Text>{message[0]}</Text>
-                </Card>
-              </Stack>
-              <Stack
-                bg="var(--mantine-color-body)"
-                align="flex-start"
-                justify="flex-start"
-                gap="md"
-              >
-                <Card bg="var(--mantine-color-green-light)" style={{ width: '70%' }}>
-                  <Text>{message[1]}</Text>
-                </Card>
-              </Stack>
-            </>
-          );
-        })}
-      </Stack>
+    <ScrollArea h={680}>
+      {id !== '' ? (
+        <Stack bg="var(--mantine-color-body)" align="stretch" justify="center" gap="md" mt={'lg'}>
+          {conversation?.map((message) => {
+            return (
+              <>
+                <Stack
+                  bg="var(--mantine-color-body)"
+                  align="flex-end"
+                  justify="flex-start"
+                  gap="md"
+                >
+                  <Card
+                    bg="var(--mantine-color-white)"
+                    style={{ width: 'fit-content', maxWidth: '70%' }}
+                    c="var(--mantine-color-black)"
+                  >
+                    <Text>{message[0]}</Text>
+                  </Card>
+                </Stack>
+                <Stack
+                  bg="var(--mantine-color-body)"
+                  align="flex-start"
+                  justify="flex-start"
+                  gap="md"
+                >
+                  <Card
+                    bg="var(--mantine-color-black)"
+                    style={{ width: 'fit-content', maxWidth: '70%' }}
+                  >
+                    <Text>{message[1]}</Text>
+                  </Card>
+                </Stack>
+              </>
+            );
+          })}
+        </Stack>
+      ) : (
+        <></>
+      )}
     </ScrollArea>
   );
 };

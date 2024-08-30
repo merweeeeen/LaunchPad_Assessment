@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { AppShell, Burger, Group, Skeleton } from '@mantine/core';
+import { AppShell, Burger, Group, Button, ScrollArea } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import axios from 'axios';
 import ConversationCard from '@/components/Conversations/ConversationCard';
 import { Conversation } from '../../models/models';
 import { UUID } from 'crypto';
 import ChatRoom from '../ChatRoom/ChatRoom';
+import Link from 'next/link';
 
 const BasicAppShell = ({ conversationId }: any) => {
   const [opened, { toggle }] = useDisclosure();
@@ -36,12 +37,25 @@ const BasicAppShell = ({ conversationId }: any) => {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        Conversations
-        {conversations.map((conversation) => {
-          return <ConversationCard conversation={conversation} setActive={setActiveConversation} />; // Pass the conversation prop correctly
-        })}
+        <Group justify="space-between" mb="xs">
+          Conversations
+          <Link href="http://localhost:3001">
+            <Button bg={'var(--mantine-color-white)'} c={'black'}>
+              New
+            </Button>
+          </Link>
+        </Group>
+        <ScrollArea>
+          {conversations.map((conversation) => {
+            return (
+              <ConversationCard conversation={conversation} setActive={setActiveConversation} />
+            ); // Pass the conversation prop correctly
+          })}
+        </ScrollArea>
       </AppShell.Navbar>
-      <AppShell.Main>{!conversationId ? <>Start a New Chat !</> : <ChatRoom conversationId={conversationId} />}</AppShell.Main>
+      <AppShell.Main>
+        <ChatRoom conversationId={conversationId} />
+      </AppShell.Main>
     </AppShell>
   );
 };
