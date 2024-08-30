@@ -20,13 +20,6 @@ class APIError(BaseModel):
     )
 
 
-class Prompt(BaseModel):
-    role: Literal["assistant", "user", "system", "function"] = Field(
-        description="Query Role Type"
-    )
-    content: str
-
-
 class DescriptionParams(BaseModel):
     id: UUID
     completion_tokens: int
@@ -43,6 +36,13 @@ class Conversation(BaseModel):
     name: str
     params: Description
     tokens: int
+
+
+class Prompt(BaseModel):
+    role: Literal["assistant", "user", "system", "function"] = Field(
+        description="Query Role Type"
+    )
+    content: str
 
 
 class Messages(BaseModel):
@@ -71,13 +71,6 @@ class ConversationPayload(BaseModel):
         title="ID of conversation to maintain history and provide context",
         description="Uses to build context to use conversation as chat between human and ai",
     )
-
-
-class Prompt(BaseModel):
-    role: Literal["assistant", "user", "system", "function"] = Field(
-        description="Query Role Type"
-    )
-    content: str
 
 
 class PromptPayload(Prompt):

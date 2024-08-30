@@ -5,7 +5,13 @@ from uuid import uuid4
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from .schema import ConversationFull, Description, DescriptionParams, Messages, Prompt
+from app.common.schema import (
+    ConversationFull,
+    Description,
+    DescriptionParams,
+    Messages,
+    Prompt,
+)
 
 load_dotenv()
 
