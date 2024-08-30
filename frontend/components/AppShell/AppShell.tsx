@@ -5,9 +5,9 @@ import axios from 'axios';
 import ConversationCard from '@/components/Conversations/ConversationCard';
 import { Conversation } from '../../models/models';
 import { UUID } from 'crypto';
-import MessageBox from '../ChatRoom/MessagesBox';
+import ChatBox from '../ChatRoom/ChatRoom';
 
-const BasicAppShell = ({ conversation }: any) => {
+const BasicAppShell = ({ conversationId }: any) => {
   const [opened, { toggle }] = useDisclosure();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConversation, setActiveConversation] = useState<UUID>();
@@ -21,7 +21,7 @@ const BasicAppShell = ({ conversation }: any) => {
       .catch((error): any => {
         console.log(error);
       });
-    console.log(conversation);
+    console.log(conversationId);
   }, []);
   return (
     <AppShell
@@ -41,7 +41,7 @@ const BasicAppShell = ({ conversation }: any) => {
           return <ConversationCard conversation={conversation} setActive={setActiveConversation} />; // Pass the conversation prop correctly
         })}
       </AppShell.Navbar>
-      <AppShell.Main>{!conversation ? <>Start a New Chat !</> : <MessageBox />}</AppShell.Main>
+      <AppShell.Main>{!conversationId ? <>Start a New Chat !</> : <ChatBox conversationId={conversationId} />}</AppShell.Main>
     </AppShell>
   );
 };
