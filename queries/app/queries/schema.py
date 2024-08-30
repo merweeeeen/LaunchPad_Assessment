@@ -5,6 +5,13 @@ from beanie import Document
 from pydantic import BaseModel, Field
 
 
+class DescriptionParams(BaseModel):
+    id: UUID
+    completion_tokens: int
+    prompt_tokens: int
+    total_tokens: int
+
+
 class Description(BaseModel):
     description: list[DescriptionParams] | None
 
@@ -29,13 +36,6 @@ class Prompt(BaseModel):
 
 class PromptPayload(Prompt):
     exist: bool
-
-
-class DescriptionParams(BaseModel):
-    id: UUID
-    completion_tokens: int
-    prompt_tokens: int
-    total_tokens: int
 
 
 class Conversation(BaseModel):

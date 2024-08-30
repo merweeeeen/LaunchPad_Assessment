@@ -38,7 +38,7 @@ async def create_conversation(
         result = await start_conversation(payload)
         response.status_code = 201
         return result
-    except:
+    except Exception:
         response.status_code = 500
         return APIError(code=500, message="Internal Server Error")
 
@@ -59,7 +59,7 @@ async def get_conversation_by_id(
     id: UUID, response: Response
 ) -> ConversationFull | APIError:
     try:
-        if len(conversation := await get_a_conversation(id)) == 0:
+        if not (conversation := await get_a_conversation(id)):
             response.status_code = 404
             return APIError(code=404, message="Specified resource(s) was not found")
         else:
