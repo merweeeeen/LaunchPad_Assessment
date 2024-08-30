@@ -26,7 +26,9 @@ async def start_conversation(payload):
     await full_conversation.insert()
     # make request to query ms
     prompt = PromptPayload(role="user", content=payload.query, exist=False).model_dump()
-    requests.post(f"http://localhost:3001/queries/{full_conversation.id}", json=prompt)
+    requests.post(
+        f"http://host.docker.internal:3001/queries/{full_conversation.id}", json=prompt
+    )
     final_output = await ConversationFull.find_one(
         ConversationFull.id == conversation_id
     )
@@ -36,7 +38,7 @@ async def start_conversation(payload):
 
 async def existing_conversation(payload):
     prompt = PromptPayload(role="user", content=payload.query, exist=True).model_dump()
-    requests.post(f"http://localhost:3001/queries/{payload.id}", json=prompt)
+    requests.post(f"http://host.docker.internal:3001/queries/{payload.id}", json=prompt)
     final_output = await ConversationFull.find_one(ConversationFull.id == payload.id)
     return final_output
 

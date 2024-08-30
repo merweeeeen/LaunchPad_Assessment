@@ -4,7 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from .queries.schema import ConversationFull
 
-client = AsyncIOMotorClient("mongodb://localhost:27017")
+client = AsyncIOMotorClient("mongodb://host.docker.internal:27017")
+# client = AsyncIOMotorClient("mongodb://localhost:27017")
 
 
 async def initiate_db():
