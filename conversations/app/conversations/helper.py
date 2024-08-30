@@ -51,7 +51,7 @@ async def get_all_conversations():
 
 
 async def get_a_conversation(id):
-    return await ConversationFull.find(ConversationFull.id == id).to_list()
+    return await ConversationFull.find_one(ConversationFull.id == id)
 
 
 async def update_a_conversation(id, payload):
