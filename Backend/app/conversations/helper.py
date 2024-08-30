@@ -1,11 +1,8 @@
-import asyncio
-import os
 from uuid import uuid4
 
-import httpx  # Use httpx instead of requests
+import httpx
 from dotenv import load_dotenv
 from fastapi import status
-from openai import OpenAI
 
 from app.common.schema import ConversationFull, Description, PromptPayload
 from app.queries.main import send_prompt
@@ -25,9 +22,8 @@ async def start_conversation(payload):
         messages=[],
     )
     await full_conversation.insert()
-    # make request to query ms
     prompt = PromptPayload(role="user", content=payload.query, exist=False).model_dump()
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(follow_redirects=True) as client:
         await client.post(
             f"http://localhost:3000/queries/{full_conversation.id}", json=prompt
         )

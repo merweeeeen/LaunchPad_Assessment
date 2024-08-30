@@ -1,4 +1,3 @@
-import asyncio
 import os
 from uuid import uuid4
 
@@ -16,6 +15,7 @@ from app.common.schema import (
 load_dotenv()
 
 
+# Calling OpenAI API
 async def llm_call(body, history=None):
     openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -39,6 +39,7 @@ async def llm_call(body, history=None):
     return completion
 
 
+# For new queries that does not have an existing conversations
 async def new_query(id, body):
     llm_response = await llm_call(body)
 
@@ -77,6 +78,7 @@ async def new_query(id, body):
     return query_id
 
 
+# For new queries that does have an existing conversations
 async def existing_query(id, body):
     conversation = await ConversationFull.find_one(ConversationFull.id == id)
     messages = conversation.messages

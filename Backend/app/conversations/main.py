@@ -22,7 +22,7 @@ from .helper import (
 router = APIRouter(prefix="/conversations")
 
 
-@router.post("/")
+@router.post("")
 async def create_conversation(
     payload: ConversationPayload, response: Response
 ) -> ConversationFull | APIError:
@@ -35,7 +35,6 @@ async def create_conversation(
 
             response.status_code = 404
             return APIError(code=404, message="Conversation not found")
-
         result = await start_conversation(payload)
         response.status_code = 201
         return result
@@ -44,7 +43,7 @@ async def create_conversation(
         return APIError(code=500, message="Internal Server Error")
 
 
-@router.get("/")
+@router.get("")
 async def get_conversations(response: Response) -> list[Conversation] | APIError:
     try:
         result = await get_all_conversations()

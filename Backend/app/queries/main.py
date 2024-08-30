@@ -14,6 +14,7 @@ async def send_prompt(id: UUID, prompt_body: PromptPayload, response: Response):
     try:
         if prompt_body.exist:
             if not await ConversationFull.find_one(ConversationFull.id == id):
+                response.status_code = 404
                 return APIError(code=404, message="Specified resource(s) was not found")
             result = await existing_query(id, prompt_body)
             response.status_code = 201
