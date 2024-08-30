@@ -2,13 +2,14 @@ from uuid import UUID
 
 from fastapi import APIRouter, Response
 
+from app.common.schema import APIError, ConversationFull, PromptPayload
+
 from .helper import existing_query, new_query
-from .schema import APIError, ConversationFull, PromptPayload
 
-router = APIRouter()
+router = APIRouter(prefix="/queries")
 
 
-@router.post("/queries/{id:uuid}")
+@router.post("/{id:uuid}")
 async def send_prompt(id: UUID, prompt_body: PromptPayload, response: Response):
     try:
         if prompt_body.exist:
@@ -18,6 +19,6 @@ async def send_prompt(id: UUID, prompt_body: PromptPayload, response: Response):
             response.status_code = 201
             return result
         return await new_query(id, prompt_body)
-    except:
+    except Exception as e:
         response.status_code = 422
         return APIError(code=422, message="Unable to create resource")

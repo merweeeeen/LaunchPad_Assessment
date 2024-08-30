@@ -2,6 +2,14 @@ from uuid import UUID
 
 from fastapi import APIRouter, Response
 
+from app.common.schema import (
+    APIError,
+    Conversation,
+    ConversationFull,
+    ConversationPayload,
+    ConversationPut,
+)
+
 from .helper import (
     delete_a_conversation,
     existing_conversation,
@@ -10,18 +18,11 @@ from .helper import (
     start_conversation,
     update_a_conversation,
 )
-from .schema import (
-    APIError,
-    Conversation,
-    ConversationFull,
-    ConversationPayload,
-    ConversationPut,
-)
 
-router = APIRouter()
+router = APIRouter(prefix="/conversations")
 
 
-@router.post("/conversations")
+@router.post("/")
 async def create_conversation(
     payload: ConversationPayload, response: Response
 ) -> ConversationFull | APIError:
@@ -32,18 +33,18 @@ async def create_conversation(
                 response.status_code = 201
                 return result
 
-            response.status_code = 500
+            response.status_code = 404
             return APIError(code=404, message="Conversation not found")
 
         result = await start_conversation(payload)
         response.status_code = 201
         return result
-    except Exception:
+    except Exception as e:
         response.status_code = 500
         return APIError(code=500, message="Internal Server Error")
 
 
-@router.get("/conversations")
+@router.get("/")
 async def get_conversations(response: Response) -> list[Conversation] | APIError:
     try:
         result = await get_all_conversations()
@@ -54,7 +55,7 @@ async def get_conversations(response: Response) -> list[Conversation] | APIError
         return APIError(code=500, message="Internal Server Error")
 
 
-@router.get("/conversations/{id:uuid}")
+@router.get("/{id:uuid}")
 async def get_conversation_by_id(
     id: UUID, response: Response
 ) -> ConversationFull | APIError:
@@ -70,7 +71,7 @@ async def get_conversation_by_id(
         return APIError(code=500, message="Internal Server Error")
 
 
-@router.put("/conversations/{id:uuid}")
+@router.put("/{id:uuid}")
 async def update_conversations(id: UUID, payload: ConversationPut, response: Response):
     try:
         # Invalid parameters would be handled by FastAPi and pydantic
@@ -84,7 +85,7 @@ async def update_conversations(id: UUID, payload: ConversationPut, response: Res
         return APIError(code=500, message="Internal Server Error")
 
 
-@router.delete("/conversations/{id:uuid}")
+@router.delete("/{id:uuid}")
 async def delete_conversation(id: UUID, response: Response):
     try:
         if not await get_a_conversation(id):

@@ -2,12 +2,13 @@ import asyncio
 import os
 from uuid import uuid4
 
-import requests
+import httpx  # Use httpx instead of requests
 from dotenv import load_dotenv
 from fastapi import status
 from openai import OpenAI
 
-from .schema import ConversationFull, Description, PromptPayload
+from app.common.schema import ConversationFull, Description, PromptPayload
+from app.queries.main import send_prompt
 
 load_dotenv()
 
@@ -26,9 +27,11 @@ async def start_conversation(payload):
     await full_conversation.insert()
     # make request to query ms
     prompt = PromptPayload(role="user", content=payload.query, exist=False).model_dump()
-    requests.post(
-        f"http://host.docker.internal:3001/queries/{full_conversation.id}", json=prompt
-    )
+    async with httpx.AsyncClient() as client:
+        await client.post(
+            f"http://localhost:3000/queries/{full_conversation.id}", json=prompt
+        )
+
     final_output = await ConversationFull.find_one(
         ConversationFull.id == conversation_id
     )
@@ -37,7 +40,9 @@ async def start_conversation(payload):
 
 async def existing_conversation(payload):
     prompt = PromptPayload(role="user", content=payload.query, exist=True).model_dump()
-    requests.post(f"http://host.docker.internal:3001/queries/{payload.id}", json=prompt)
+    async with httpx.AsyncClient() as client:
+        await client.post(f"http://localhost:3000/queries/{payload.id}", json=prompt)
+
     final_output = await ConversationFull.find_one(ConversationFull.id == payload.id)
     return final_output
 
