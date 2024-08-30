@@ -1,8 +1,7 @@
 # Beanie uses Motor async client under the hood
+from app.conversations.schema import ConversationFull
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
-
-from app.conversations.schema import ConversationFull
 
 client = AsyncIOMotorClient("mongodb://localhost:27017")
 

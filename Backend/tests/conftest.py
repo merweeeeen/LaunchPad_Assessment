@@ -1,14 +1,13 @@
 import asyncio
 
 import pytest_asyncio
+from app.conversations.schema import ConversationFull
+from app.db import initiate_db
+from app.main import app
 from beanie import init_beanie
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from motor.motor_asyncio import AsyncIOMotorClient
-
-from app.conversations.schema import ConversationFull
-from app.db import initiate_db
-from app.main import app
 
 from .test_db import initiate_test_db
 
