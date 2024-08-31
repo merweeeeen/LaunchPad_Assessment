@@ -43,9 +43,10 @@ const BasicAppShell = ({ conversationId }: any) => {
           </Link>
         </Group>
         <ScrollArea>
-          {data && data.map((conversation: any) => {
-            return <ConversationCard conversation={conversation} />; // Pass the conversation prop correctly
-          })}
+          {data &&
+            data.map((conversation: any) => {
+              return <ConversationCard conversation={conversation} setSubmitted={setSubmitted} />; // Pass the conversation prop correctly
+            })}
         </ScrollArea>
       </AppShell.Navbar>
       <AppShell.Main>

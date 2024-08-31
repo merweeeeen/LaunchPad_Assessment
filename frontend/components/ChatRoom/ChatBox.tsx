@@ -1,9 +1,8 @@
 import { Button, TextInput, Group } from '@mantine/core';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
-import { ConversationFull } from '@/models/models';
 
 const ChatBox = ({ id, setSubmitted }: any) => {
   const router = useRouter();
