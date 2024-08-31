@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
+import { getHotkeyHandler } from '@mantine/hooks';
 
 const ChatBox = ({ id, setSubmitted }: any) => {
   const router = useRouter();
@@ -46,6 +47,12 @@ const ChatBox = ({ id, setSubmitted }: any) => {
     mutation.mutate({ query: query });
   };
 
+  const onEnter = async (e: any) => {
+    if (query !== '') {
+      await onSubmit(e);
+    }
+  };
+
   return (
     <Group m="md" justify="center">
       <TextInput
@@ -54,6 +61,7 @@ const ChatBox = ({ id, setSubmitted }: any) => {
         size="lg"
         onChange={(e) => setQuery(e.target.value)}
         value={query}
+        onKeyDown={getHotkeyHandler([['Enter', onEnter]])}
       />
       <Button
         size="lg"
