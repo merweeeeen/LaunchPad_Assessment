@@ -1,8 +1,12 @@
+import { useRef, useEffect } from 'react';
 import { Stack, Card, Text, ScrollArea } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any) => {
+const MessageBox = ({ id, setSubmitted, submitted, setError }: any) => {
+  const viewport = useRef<HTMLDivElement>(null);
+  const scrollToBottom = () =>
+    viewport.current!.scrollTo({ top: viewport.current!.scrollHeight, behavior: 'smooth' });
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['fetchConvo', id, submitted],
     queryFn: async () => {
@@ -27,8 +31,12 @@ const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any)
     },
   });
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [data]);
+
   return (
-    <ScrollArea h={680}>
+    <ScrollArea h={680} viewportRef={viewport}>
       {id !== '' ? (
         <Stack bg="var(--mantine-color-body)" align="stretch" justify="center" gap="md" mt={'lg'}>
           {data &&

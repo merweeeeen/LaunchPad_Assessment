@@ -25,19 +25,25 @@ async def start_conversation(payload):
     prompt = PromptPayload(role="user", content=payload.query, exist=False).model_dump()
     async with httpx.AsyncClient(follow_redirects=True) as client:
         await client.post(
-            f"http://localhost:3000/queries/{full_conversation.id}", json=prompt
+            f"http://localhost:3000/queries/{full_conversation.id}",
+            json=prompt,
+            timeout=15.0,
         )
 
     final_output = await ConversationFull.find_one(
         ConversationFull.id == conversation_id
     )
+
     return final_output
 
 
 async def existing_conversation(payload):
     prompt = PromptPayload(role="user", content=payload.query, exist=True).model_dump()
+
     async with httpx.AsyncClient() as client:
-        await client.post(f"http://localhost:3000/queries/{payload.id}", json=prompt)
+        await client.post(
+            f"http://localhost:3000/queries/{payload.id}", json=prompt, timeout=15.0
+        )
 
     final_output = await ConversationFull.find_one(ConversationFull.id == payload.id)
     return final_output
