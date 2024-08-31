@@ -1,13 +1,16 @@
-import { useState } from 'react';
 import MessageBox from './MessagesBox';
 import ChatBox from './ChatBox';
-import { Stack } from '@mantine/core';
 
-const ChatRoom = ({ conversationId, setSubmitted, submitted }: any) => {
+const ChatRoom = ({ conversationId, setSubmitted, submitted, setError }: any) => {
   return (
     <>
-      <MessageBox id={conversationId} setSubmitted={setSubmitted} submitted={submitted} />
-      <ChatBox id={conversationId} setSubmitted={setSubmitted} />
+      <MessageBox
+        id={conversationId}
+        setSubmitted={setSubmitted}
+        submitted={submitted}
+        setError={setError}
+      />
+      <ChatBox id={conversationId} setSubmitted={setSubmitted} setError={setError} />
     </>
   );
 };

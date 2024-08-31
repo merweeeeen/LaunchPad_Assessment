@@ -9,9 +9,10 @@ import DeleteButton from './DeleteButton';
 interface ConversationCard {
   conversation: Conversation;
   setSubmitted?: (submit: boolean) => void;
+  setError: (error: boolean) => void;
 }
 
-const ConversationCard = ({ conversation, setSubmitted }: ConversationCard) => {
+const ConversationCard = ({ conversation, setSubmitted, setError }: ConversationCard) => {
   const [modal, setModal] = useState(false);
   return (
     <>
@@ -39,7 +40,7 @@ const ConversationCard = ({ conversation, setSubmitted }: ConversationCard) => {
                 Change Title
               </Menu.Item>
               <Menu.Item>
-                <DeleteButton conversationId={conversation.id} setSubmitted={setSubmitted} />
+                <DeleteButton conversationId={conversation.id} setSubmitted={setSubmitted} setError={setError} />
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
@@ -50,6 +51,7 @@ const ConversationCard = ({ conversation, setSubmitted }: ConversationCard) => {
         setModal={setModal}
         conversationId={conversation.id}
         setSubmitted={setSubmitted}
+        setError={setError}
       />
     </>
   );

@@ -3,13 +3,18 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
-const TitleModal = ({ conversationId, modal, setModal, setSubmitted }: any) => {
+const TitleModal = ({ conversationId, modal, setModal, setSubmitted, setError }: any) => {
   const [title, setTitle] = useState('');
   const setChanges = async (changes: { title: string }) => {
-    await axios.put(`http://localhost:3000/conversations/${conversationId}`, {
-      name: changes.title,
-      params: null,
-    });
+    try {
+      await axios.put(`http://localhost:3000/conversations/${conversationId}`, {
+        name: changes.title,
+        params: null,
+      });
+    } catch (error) {
+      setError(true);
+      console.log(error)
+    }
   };
 
   const mutation = useMutation({

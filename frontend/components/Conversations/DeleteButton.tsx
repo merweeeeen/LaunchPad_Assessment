@@ -3,9 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-const DeleteButton = ({ conversationId, setSubmitted }: any) => {
+const DeleteButton = ({ conversationId, setSubmitted, setError }: any) => {
   const router = useRouter();
   const setChanges = async () => {
+    try{
     await axios.delete(`http://localhost:3000/conversations/${conversationId}`);
 
     router.push(
@@ -15,6 +16,10 @@ const DeleteButton = ({ conversationId, setSubmitted }: any) => {
       undefined,
       { shallow: true }
     );
+    }catch(error){
+      setError(true)
+      console.log(error)
+    }
   };
 
   const mutation = useMutation({
