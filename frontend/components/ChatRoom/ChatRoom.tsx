@@ -3,8 +3,7 @@ import MessageBox from './MessagesBox';
 import ChatBox from './ChatBox';
 import { Stack } from '@mantine/core';
 
-const ChatRoom = ({ conversationId }: any) => {
-  const [submitted, setSubmitted] = useState<boolean>(false);
+const ChatRoom = ({ conversationId, setSubmitted, submitted }: any) => {
   return (
     <>
       <MessageBox id={conversationId} setSubmitted={setSubmitted} submitted={submitted} />
