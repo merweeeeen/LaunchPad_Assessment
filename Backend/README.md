@@ -22,6 +22,12 @@ This will start up both the Conversations and Query API
 
 The API documentation could be found here: http://localhost:3000/docs
 
+### Step 5: Running the Tests
+Run the following command to run the automated test cases
+```bash
+docker compose exec -t conversations pytest
+```
+
 ## Tech Stack Used
 - Python
 - FastAPI
