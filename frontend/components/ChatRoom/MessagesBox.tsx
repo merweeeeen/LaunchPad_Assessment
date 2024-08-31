@@ -7,7 +7,7 @@ const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any)
     queryKey: ['fetchConvo', id, submitted],
     queryFn: async () => {
       try {
-        if (id !== '' && id !== undefined ) {
+        if (id !== '' && id !== undefined) {
           const response = await axios.get(`http://localhost:3000/conversations/${id}`);
           let sequenced_conversation = [];
           for (let message of response.data.messages) {
@@ -68,7 +68,11 @@ const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any)
           {isPending && <>Loading</>}
         </Stack>
       ) : (
-        <></>
+        <Stack align="center">
+          <Text style={{ width: 'fit-content' }}>
+            <h1>Start a New Conversation Below !</h1>
+          </Text>
+        </Stack>
       )}
     </ScrollArea>
   );
