@@ -9,9 +9,6 @@ interface ConversationCard {
 }
 
 const ConversationCard = ({ conversation }: ConversationCard) => {
-  useEffect(() => {
-    console.log(conversation.name);
-  }, []);
   return (
     <Link href={`http://localhost:3001/${conversation.id}`} style={{ textDecoration: 'none' }}>
       <Card component="a" mt="sm" target="_blank">

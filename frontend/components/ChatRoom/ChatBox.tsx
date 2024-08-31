@@ -16,9 +16,8 @@ const ChatBox = ({ id, setSubmitted }: any) => {
         query: query.query,
         id: id,
       });
-      console.log(response);
-      setSubmitted(true);
       setLoading(false);
+      setSubmitted(true);
       return response;
     }
     const { data: response } = await axios.post('http://localhost:3000/conversations', {
@@ -31,9 +30,8 @@ const ChatBox = ({ id, setSubmitted }: any) => {
       undefined,
       { shallow: true }
     );
-    console.log(response);
-    setSubmitted(true);
     setLoading(false);
+    setSubmitted(true);
     return response;
   };
 
@@ -46,11 +44,9 @@ const ChatBox = ({ id, setSubmitted }: any) => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
     setLoading(true);
-    await mutation.mutate({ query: query });
+    mutation.mutate({ query: query });
   };
-  useEffect(() => {
-    console.log(query);
-  });
+
   return (
     <Group m="md" justify="center">
       <TextInput
