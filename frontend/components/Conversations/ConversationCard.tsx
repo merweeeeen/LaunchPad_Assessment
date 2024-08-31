@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { IconDotsVertical } from '@tabler/icons-react';
 import { useState } from 'react';
 import TitleModal from './ChangeTitleModal';
+import DeleteButton from './DeleteButton';
 
 interface ConversationCard {
   conversation: Conversation;
-  setSubmitted: (submit: boolean) => void;
+  setSubmitted?: (submit: boolean) => void;
 }
 
 const ConversationCard = ({ conversation, setSubmitted }: ConversationCard) => {
@@ -36,6 +37,9 @@ const ConversationCard = ({ conversation, setSubmitted }: ConversationCard) => {
                 }}
               >
                 Change Title
+              </Menu.Item>
+              <Menu.Item>
+                <DeleteButton conversationId={conversation.id} setSubmitted={setSubmitted} />
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
