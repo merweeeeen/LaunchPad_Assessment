@@ -21,3 +21,14 @@ This will start up both the Conversations and Query API
 ### Step 4: Run the API
 
 The API documentation could be found here: http://localhost:3000/docs
+
+## Tech Stack Used
+- Python
+- FastAPI
+- Pydantic
+- Beanie
+- OpenAI
+- MongoDB
+- Pre-commit
+- PytTest
+- Docker
