@@ -1,22 +1,53 @@
-import { Card, Button, Text, Group } from '@mantine/core';
+import { Card, Text, Group, Menu } from '@mantine/core';
 import { Conversation } from '../../models/models';
-import { useEffect } from 'react';
 import Link from 'next/link';
-import { UUID } from 'crypto';
+import { IconDotsVertical } from '@tabler/icons-react';
+import { useState } from 'react';
+import TitleModal from './ChangeTitleModal';
 
 interface ConversationCard {
   conversation: Conversation;
+  setSubmitted: (submit: boolean) => void;
 }
 
-const ConversationCard = ({ conversation }: ConversationCard) => {
+const ConversationCard = ({ conversation, setSubmitted }: ConversationCard) => {
+  const [modal, setModal] = useState(false);
   return (
-    <Link href={`http://localhost:3001/${conversation.id}`} style={{ textDecoration: 'none' }}>
+    <>
       <Card component="a" mt="sm" target="_blank">
-        <Text size="md" c="var(--mantine-color-white)">
-          {conversation.name}
-        </Text>
+        <Group justify="space-between">
+          <Link
+            href={`http://localhost:3001/${conversation.id}`}
+            style={{ textDecoration: 'none', width: '80%' }}
+          >
+            <Text size="md" c="var(--mantine-color-white)">
+              {conversation.name}
+            </Text>
+          </Link>
+          <Menu>
+            <Menu.Target>
+              <IconDotsVertical />
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Label>Settings</Menu.Label>
+              <Menu.Item
+                onClick={() => {
+                  setModal(true);
+                }}
+              >
+                Change Title
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
       </Card>
-    </Link>
+      <TitleModal
+        modal={modal}
+        setModal={setModal}
+        conversationId={conversation.id}
+        setSubmitted={setSubmitted}
+      />
+    </>
   );
 };
 
