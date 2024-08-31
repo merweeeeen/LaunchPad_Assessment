@@ -31,5 +31,5 @@ export interface Messages {
 }
 
 export interface ConversationFull {
-  messages?: Messages[];
+  messages: Messages[];
 }
