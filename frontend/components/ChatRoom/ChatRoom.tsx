@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import MessageBox from './MessagesBox';
 import ChatBox from './ChatBox';
-import { Dialog } from '@mantine/core';
 
 const ChatRoom = ({ conversationId, setSubmitted, submitted, setError }: any) => {
   return (

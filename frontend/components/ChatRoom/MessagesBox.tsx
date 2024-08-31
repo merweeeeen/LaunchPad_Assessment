@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Stack, Card, Text, ScrollArea, Notification } from '@mantine/core';
+import { Stack, Card, Text, ScrollArea } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -11,7 +10,6 @@ const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any)
         if (id !== '' && id !== undefined ) {
           const response = await axios.get(`http://localhost:3000/conversations/${id}`);
           let sequenced_conversation = [];
-          console.log(response.data);
           for (let message of response.data.messages) {
             if (message.content[0].role == 'user') {
               sequenced_conversation.push([message.content[0].content, message.content[1].content]);
