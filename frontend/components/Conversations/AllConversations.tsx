@@ -11,7 +11,6 @@ export default function Conversations() {
       .get('http://localhost:3000/conversations')
       .then((response) => {
         setConversations(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
