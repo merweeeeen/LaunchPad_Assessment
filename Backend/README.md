@@ -12,17 +12,20 @@
 
 ### Step 2: Add environment variables for the OpenAI API Key
 
-### Step 3: Run the following command
+### Step 3: Ensure that your local MongoDB instance is running.
+
+### Step 4: Run the docker containers
+Run the following command locally in the terminal
 ```bash
 docker compose up
 ```
 This will start up both the Conversations and Query API
 
-### Step 4: Run the API
+### Step 5: Run the API
 
 The API documentation could be found here: http://localhost:3000/docs
 
-### Step 5: Running the Tests
+### Step 6: Running the Tests
 Run the following command to run the automated test cases
 ```bash
 docker compose exec -t conversations pytest

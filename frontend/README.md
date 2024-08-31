@@ -11,21 +11,20 @@
 
 ### Step 1: Start up your Docker application
 
-### Step 2: Ensure that your local MongoDB instance is running.
-
-### Step 3: Install the dependencies locally
+### Step 2: Install the dependencies locally
 Run the following command locally in the terminal
 ```bash
 npm install
 ```
 
-### Step 4: Run the following command
+### Step 3: Run the Docker containers
+Run the following command locally in the terminal
 ```bash
 docker compose up
 ```
 This will start up the frontend application.
 
-### Step 5: Open the Application
+### Step 4: Open the Application
 
 The url for the frontend application would be http://localhost:3001/
 
