@@ -69,9 +69,7 @@ const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any)
         </Stack>
       ) : (
         <Stack align="center">
-          <Text style={{ width: 'fit-content' }}>
-            <h1>Start a New Conversation Below !</h1>
-          </Text>
+          <h1>Start a New Conversation Below !</h1>
         </Stack>
       )}
     </ScrollArea>
