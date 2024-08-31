@@ -1,24 +1,29 @@
-import { useEffect, useState } from 'react';
-import { AppShell, Burger, Group, Button, ScrollArea } from '@mantine/core';
+import { useState } from 'react';
+import { AppShell, Burger, Group, Button, ScrollArea, Dialog } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import axios from 'axios';
 import ConversationCard from '@/components/Conversations/ConversationCard';
 import { Conversation } from '../../models/models';
-import { UUID } from 'crypto';
 import ChatRoom from '../ChatRoom/ChatRoom';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 
 const BasicAppShell = ({ conversationId }: any) => {
+  const [errorActive, setError] = useState(false);
   const [opened, { toggle }] = useDisclosure();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['fetchConvo', submitted],
     queryFn: async () => {
-      const response = await axios.get(`http://localhost:3000/conversations`);
-
-      return response.data;
+      try {
+        const response = await axios.get(`http://localhost:3000/conversations`);
+        console.log(response.data)
+        return response.data;
+      } catch (error) {
+        setError(true);
+        console.log(error);
+      }
     },
   });
   return (
@@ -45,7 +50,13 @@ const BasicAppShell = ({ conversationId }: any) => {
         <ScrollArea>
           {data &&
             data.map((conversation: any) => {
-              return <ConversationCard conversation={conversation} setSubmitted={setSubmitted} />; // Pass the conversation prop correctly
+              return (
+                <ConversationCard
+                  conversation={conversation}
+                  setSubmitted={setSubmitted}
+                  setError={setError}
+                />
+              ); // Pass the conversation prop correctly
             })}
         </ScrollArea>
       </AppShell.Navbar>
@@ -54,8 +65,12 @@ const BasicAppShell = ({ conversationId }: any) => {
           conversationId={conversationId}
           setSubmitted={setSubmitted}
           submitted={submitted}
+          setError={setError}
         />
       </AppShell.Main>
+      <Dialog opened={errorActive} position={{ top: 20, left: '40%' }} bg="red">
+        Error: Please Refresh Page
+      </Dialog>
     </AppShell>
   );
 };

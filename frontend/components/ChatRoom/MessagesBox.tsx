@@ -1,23 +1,31 @@
-import { useEffect, useState } from 'react';
-import { Stack, Card, Text, ScrollArea } from '@mantine/core';
+import { useState } from 'react';
+import { Stack, Card, Text, ScrollArea, Notification } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const MessageBox = ({ id, setSubmitted, submitted }: any) => {
+const MessageBox = ({ id, setSubmitted, submitted, setError, errorActive }: any) => {
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['fetchConvo', id, submitted],
     queryFn: async () => {
-      const response = await axios.get(`http://localhost:3000/conversations/${id}`);
-      let sequenced_conversation = [];
-      for (let message of response.data.messages) {
-        if (message.content[0].role == 'user') {
-          sequenced_conversation.push([message.content[0].content, message.content[1].content]);
-        } else {
-          sequenced_conversation.push([message.content[1].content, message.content[0].content]);
+      try {
+        if (id !== '' && id !== undefined ) {
+          const response = await axios.get(`http://localhost:3000/conversations/${id}`);
+          let sequenced_conversation = [];
+          console.log(response.data);
+          for (let message of response.data.messages) {
+            if (message.content[0].role == 'user') {
+              sequenced_conversation.push([message.content[0].content, message.content[1].content]);
+            } else {
+              sequenced_conversation.push([message.content[1].content, message.content[0].content]);
+            }
+          }
+          setSubmitted(false);
+          return sequenced_conversation;
         }
+      } catch (error) {
+        setError(true);
+        console.log(error);
       }
-      setSubmitted(false);
-      return sequenced_conversation;
     },
   });
 

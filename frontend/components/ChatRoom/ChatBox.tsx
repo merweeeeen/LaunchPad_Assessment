@@ -5,12 +5,13 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { getHotkeyHandler } from '@mantine/hooks';
 
-const ChatBox = ({ id, setSubmitted }: any) => {
+const ChatBox = ({ id, setSubmitted, setError }: any) => {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const createConversation = async (query: { query: string }) => {
+    try{
     if (id !== '') {
       const { data: response } = await axios.post('http://localhost:3000/conversations', {
         query: query.query,
@@ -33,6 +34,10 @@ const ChatBox = ({ id, setSubmitted }: any) => {
     setLoading(false);
     setSubmitted(true);
     return response;
+    }catch (error) {
+      setError(true)
+      console.log(error)
+    }
   };
 
   const mutation = useMutation({
@@ -49,6 +54,7 @@ const ChatBox = ({ id, setSubmitted }: any) => {
 
   const onEnter = async (e: any) => {
     if (query !== '') {
+      setQuery('');
       await onSubmit(e);
     }
   };
