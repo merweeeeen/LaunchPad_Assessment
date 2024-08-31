@@ -67,7 +67,7 @@ const ChatBox = ({ id, setSubmitted }: any) => {
         bg={'var(--mantine-color-white)'}
         c={'black'}
       >
-        Validate
+        Send
       </Button>
     </Group>
   );
