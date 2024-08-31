@@ -1,55 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Stack, Card, Text, ScrollArea } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const MessageBox = ({ id, setSubmitted, submitted }: any) => {
   const [conversation, setConversation] = useState<any[]>();
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/conversations/${id}`)
-      .then((response) => {
-        let sequenced_conversation = [];
-        for (let message of response.data.messages) {
-          if (message.content[0].role == 'user') {
-            sequenced_conversation.push([message.content[0].content, message.content[1].content]);
-          } else {
-            sequenced_conversation.push([message.content[1].content, message.content[0].content]);
-          }
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['fetchConvo', id, submitted],
+    queryFn: async () => {
+      const response = await axios.get(`http://localhost:3000/conversations/${id}`);
+      let sequenced_conversation = [];
+      for (let message of response.data.messages) {
+        if (message.content[0].role == 'user') {
+          sequenced_conversation.push([message.content[0].content, message.content[1].content]);
+        } else {
+          sequenced_conversation.push([message.content[1].content, message.content[0].content]);
         }
-        setConversation(sequenced_conversation);
-      })
-      .catch((error): any => {
-        console.log(error);
-      });
-  }, [id]);
-
-  useEffect(() => {
-    if (submitted) {
-      axios
-        .get(`http://localhost:3000/conversations/${id}`)
-        .then((response) => {
-          let sequenced_conversation = [];
-          for (let message of response.data.messages) {
-            if (message.content[0].role == 'user') {
-              sequenced_conversation.push([message.content[0].content, message.content[1].content]);
-            } else {
-              sequenced_conversation.push([message.content[1].content, message.content[0].content]);
-            }
-          }
-          setConversation(sequenced_conversation);
-          setSubmitted(false);
-        })
-        .catch((error): any => {
-          console.log(error);
-        });
-    }
-  }, [submitted]);
+      }
+      setConversation(sequenced_conversation);
+      return sequenced_conversation
+    },
+  });
 
   return (
     <ScrollArea h={680}>
       {id !== '' ? (
         <Stack bg="var(--mantine-color-body)" align="stretch" justify="center" gap="md" mt={'lg'}>
-          {conversation?.map((message) => {
+          {data && data.map((message) => {
             return (
               <>
                 <Stack
@@ -82,6 +59,7 @@ const MessageBox = ({ id, setSubmitted, submitted }: any) => {
               </>
             );
           })}
+          {isPending && <>Loading</>}
         </Stack>
       ) : (
         <></>

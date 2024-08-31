@@ -7,24 +7,20 @@ import { Conversation } from '../../models/models';
 import { UUID } from 'crypto';
 import ChatRoom from '../ChatRoom/ChatRoom';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 
 const BasicAppShell = ({ conversationId }: any) => {
   const [opened, { toggle }] = useDisclosure();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['fetchConvo', submitted],
+    queryFn: async () => {
+      const response = await axios.get(`http://localhost:3000/conversations`);
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:3000/conversations')
-      .then((response): any => {
-        setConversations(response.data);
-        console.log(response.data);
-      })
-      .catch((error): any => {
-        console.log(error);
-      });
-    console.log(conversationId);
-  }, [submitted]);
+      return response.data;
+    },
+  });
   return (
     <AppShell
       header={{ height: 60 }}
@@ -47,7 +43,7 @@ const BasicAppShell = ({ conversationId }: any) => {
           </Link>
         </Group>
         <ScrollArea>
-          {conversations.map((conversation) => {
+          {data && data.map((conversation: any) => {
             return <ConversationCard conversation={conversation} />; // Pass the conversation prop correctly
           })}
         </ScrollArea>
